@@ -101,20 +101,14 @@ module.exports.getAccessToken = async (event) => {
 // getCalendarEvents() function
 
 module.exports.getCalendarEvents = async (event) => {
-  // The values used to instantiate the OAuthClient are at the top of the file
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
     redirect_uris[0]
   );
-  // Decode authorization code extracted from the URL query
   const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
-  oAuth2Client = oAuth2Client.setCredentials({ access_token });
+  oAuth2Client.setCredentials({ access_token });
   return new Promise((resolve, reject) => {
-    /**
-  *  Exchange authorization access_token for access token with a “callback” after the exchange,
-  *  The callback in this case is an arrow function with the results as parameters: “err” and “token.”
-  */
     calendar.events.list(
       {
         calendarId: calendar_id,
