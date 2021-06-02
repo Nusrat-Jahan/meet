@@ -7,11 +7,6 @@ import { getEvents, extractLocations } from "./api";
 import { WarningAlert } from "./Alert";
 
 class App extends Component {
-  state = {
-    events: [],
-    locations: [],
-    eventCount: 32,
-  };
   render() {
     return (
       <div className="App">
