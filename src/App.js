@@ -3,12 +3,14 @@ import "./App.css";
 import EventList from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
+// import Event from './Event';
 
 class App extends Component {
   state = {
     events: [],
     locations: [],
-    numberOfEvents: []
+    numberOfEvents: [],
+    // showDetails: []
   }
   render() {
     return (
@@ -16,6 +18,7 @@ class App extends Component {
         <CitySearch locations={this.state.locations} />
         <EventList events={this.state.events} />
         <NumberOfEvents numberOfEvents={this.state.numberOfEvents} />
+        {/* <Event showDetails={this.state.showDetails} /> */}
       </div>
     );
   }
