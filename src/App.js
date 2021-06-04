@@ -11,7 +11,9 @@ class App extends Component {
   state = {
     events: [],
     locations: [],
-    numberOfEvents: [],
+    numberOfEvents: 32,
+    eventsByLocation: null,
+    currentLocation: 'all'
     // showDetails: []
   }
 
@@ -20,17 +22,27 @@ class App extends Component {
       const locationEvents = (location === 'all') ?
         events :
         events.filter((event) => event.location === location);
+      const { numberOfEvents } = this.state;
+      const filteredEvents = locationEvents.slice(0, numberOfEvents);
+      const eventsByLocation = locationEvents.length;
       this.setState({
-        events: locationEvents
+        events: filteredEvents,
+        eventsByLocation: eventsByLocation,
+        currentLocation: location
       });
     });
   }
 
   componentDidMount() {
     this.mounted = true;
+    const { numberOfEvents } = this.state;
     getEvents().then((events) => {
       if (this.mounted) {
-        this.setState({ events, locations: extractLocations(events) });
+        this.setState({
+          events: events.slice(0, numberOfEvents),
+          locations: extractLocations(events),
+          eventsByLocation: events.length
+        });
       }
     });
   }
@@ -39,6 +51,13 @@ class App extends Component {
     this.mounted = false;
   }
 
+  updateEventCount = eventCount => {
+    const { currentLocation } = this.state;
+    this.setState({
+      numberOfEvents: eventCount
+    });
+    this.updateEvents(currentLocation);
+  }
   render() {
     return (
       <div className="App">
@@ -46,7 +65,10 @@ class App extends Component {
         <h4 className='filter-title'>Choose your nearest city</h4>
         <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
         {/*  pass the locations and updateEvents method as a prop to CitySearch */}
-        <NumberOfEvents numberOfEvents={this.state.numberOfEvents} updateEvents={this.updateEvents} />
+        <div className="number-input">
+          <p className="input-label number-label">Show number of events:</p>
+          <NumberOfEvents numberOfEvents={this.state.numberOfEvents} updateEventCount={this.updateEventCount} />
+        </div>
         <EventList events={this.state.events} />
         {/* pass the state to EventList, as a prop of events */}
         {/* <Event showDetails={this.state.showDetails} /> */}
