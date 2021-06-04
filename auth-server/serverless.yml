@@ -69,7 +69,7 @@ functions:
     handler: handler.getAuthURL
     events:
       - http: 
-          path: get-auth-url
+          path: api/get-auth-url
           method: get
   getAccessToken:
     handler: handler.getAccessToken
