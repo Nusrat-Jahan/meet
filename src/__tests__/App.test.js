@@ -65,4 +65,33 @@ describe('<App /> integration', () => {
     expect(AppWrapper.state('events')).toEqual(allEvents);
     AppWrapper.unmount();
   });
+  // numberOFEvent test
+  test('App passes "numberOfEvents" state as a prop to NumberOfEvents', () => {
+    const AppWrapper = mount(<App />);
+    const AppEventsState = AppWrapper.state('numberOfEvents');
+    expect(AppEventsState).not.toEqual(undefined); //this checks whether the state of events isn’t undefined
+    expect(AppWrapper.find(NumberOfEvents).props().numberOfEvents).toEqual(AppEventsState);
+    // compare the state of App’s events with EventList's events prop to ensure it’s been passed correctly
+    AppWrapper.unmount();
+  });
+
+  test("render correct list of events", () => {
+    const AppWrapper = mount(<App />);
+    AppWrapper.setState({
+      events: mockData,
+    });
+    expect(AppWrapper.find(".event")).toHaveLength(mockData.length);
+    AppWrapper.unmount();
+  });
+
+  test('update List of events after user changes number of events', async () => {
+    const AppWrapper = mount(<App />);
+    const eventObject = { target: { value: 8 } };
+    AppWrapper.find(".NumberOfEvents input").simulate(
+      "change",
+      eventObject
+    );
+    expect(AppWrapper.state("numberOfEvents")).toBe(8);
+  });
+
 });
