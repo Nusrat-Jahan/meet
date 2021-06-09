@@ -84,44 +84,25 @@ describe('<App /> integration', () => {
     AppWrapper.unmount();
   });
 
-  test('update List of events after user changes number of events', async () => {
+  test('change list of events after user updates numberOfEvents', () => {
     const AppWrapper = mount(<App />);
-    const eventObject = { target: { value: 8 } };
-    AppWrapper.find(".NumberOfEvents input").simulate(
-      "change",
-      eventObject
+    const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
+    AppWrapper.instance().updateEvents = jest.fn();
+    AppWrapper.instance().forceUpdate();
+    NumberOfEventsWrapper.setState({ numberOfEvents: 32 });
+    const eventObject = { target: { value: 10 } };
+    NumberOfEventsWrapper.find('.NumberOfEvents input').simulate('change', eventObject);
+    expect(NumberOfEventsWrapper.state('numberOfEvents')).toBe(10);
+    AppWrapper.unmount();
+  });
+  test('App passes "locations state as a prop to CitySearch', () => {
+    const AppWrapper = mount(<App />);
+    const AppLocationsState = AppWrapper.state('locations');
+    expect(AppLocationsState).not.toEqual(undefined);
+    expect(AppWrapper.find(CitySearch).props().locations).toEqual(
+      AppLocationsState
     );
-    expect(AppWrapper.state('numberOfEvents')).toBe(8);
+    AppWrapper.unmount();
   });
 
-  test('the event list should be the size of the numberofevents', async () => {
-    const AppWrapper = mount(<App />);
-    const inputNumberOfEvents = AppWrapper.find(NumberOfEvents).find('.NumberOfEvents')
-    const event = { target: { value: 10 } }
-    await inputNumberOfEvents.simulate('change', event)
-    const allEvents = await getEvents();
-    await allEvents.slice(0, AppWrapper.state('numberOfEvents'))
-    const numberOfEvents = AppWrapper.state('numberOfEvents')
-    AppWrapper.update();
-    expect(AppWrapper.find(EventList).find('.EventList').children()).toHaveLength(numberOfEvents)
-    AppWrapper.unmount();
-  })
-  // test('App passes "locations state as a prop to CitySearch', () => {
-  //   const AppWrapper = mount(<App />);
-  //   const AppLocationsState = AppWrapper.state('locations');
-  //   expect(AppLocationsState).not.toEqual(undefined);
-  //   expect(AppWrapper.find(CitySearch).props().locations).toEqual(
-  //     AppLocationsState
-  //   );
-  //   AppWrapper.unmount();
-  // });
-
-  // test('App passes "eventCount state as a prop to NumberOfEvents', () => {
-  //   const AppWrapper = mount(<App />);
-  //   const AppEventCountState = AppWrapper.state('eventCount');
-  //   expect(AppWrapper.find(NumberOfEvents).props().locations).not.toEqual(
-  //     AppEventCountState
-  //   );
-  //   AppWrapper.unmount();
-  // });
 });
