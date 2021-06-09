@@ -91,12 +91,12 @@ describe('<App /> integration', () => {
       "change",
       eventObject
     );
-    expect(AppWrapper.state("numberOfEvents")).toBe(8);
+    expect(AppWrapper.state('numberOfEvents')).toBe(8);
   });
 
   test('the event list should be the size of the numberofevents', async () => {
     const AppWrapper = mount(<App />);
-    const inputNumberOfEvents = AppWrapper.find(NumberOfEvents).find('.numberOfEvents')
+    const inputNumberOfEvents = AppWrapper.find(NumberOfEvents).find('.NumberOfEvents')
     const event = { target: { value: 10 } }
     await inputNumberOfEvents.simulate('change', event)
     const allEvents = await getEvents();
