@@ -138,9 +138,8 @@ class App extends Component {
     getEvents().then((events) => {
       if (this.mounted) {
         this.setState({
-          events,
-          locations: extractLocations(events),
-          eventsByLocation: events.length
+          events: events.slice(0, numberOfEvents),
+          locations: extractLocations(events)
         });
       }
       // this.updateEvents();
