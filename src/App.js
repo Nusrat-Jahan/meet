@@ -54,7 +54,7 @@ class App extends Component {
     getEvents().then((events) => {
       if (this.mounted) {
         this.setState({
-          events,
+          events: events.slice(0, numberOfEvents),
           locations: extractLocations(events),
         });
         console.log("events", events);
