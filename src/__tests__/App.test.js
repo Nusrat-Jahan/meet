@@ -95,6 +95,7 @@ describe('<App /> integration', () => {
     expect(NumberOfEventsWrapper.state('numberOfEvents')).toBe(10);
     AppWrapper.unmount();
   });
+
   test('App passes "locations state as a prop to CitySearch', () => {
     const AppWrapper = mount(<App />);
     const AppLocationsState = AppWrapper.state('locations');
@@ -104,5 +105,4 @@ describe('<App /> integration', () => {
     );
     AppWrapper.unmount();
   });
-
 });
