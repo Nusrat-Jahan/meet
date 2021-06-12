@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { InfoAlert } from './Alert';
 
 class CitySearch extends Component {
   state = {
@@ -28,6 +29,7 @@ class CitySearch extends Component {
   render() {
     return (
       <div className="CitySearch">
+        <InfoAlert text={this.state.infoText} />
         <input
           type="text"
           className="city"
