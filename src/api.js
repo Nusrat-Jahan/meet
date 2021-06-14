@@ -2,11 +2,6 @@ import { mockData } from './mock-data';
 import axios from 'axios';
 import NProgress from 'nprogress';
 
-export const extractLocations = (events) => {
-  var extractLocations = events.map((event) => event.location);
-  var locations = [...new Set(extractLocations)];
-  return locations;
-};
 
 export const getAccessToken = async () => {
   const accessToken = localStorage.getItem('access_token');
@@ -38,15 +33,25 @@ const checkToken = async (accessToken) => {
   return result;
 };
 
+export const extractLocations = (events) => {
+  var extractLocations = events.map((event) => event.location);
+  var locations = [...new Set(extractLocations)];
+  return locations;
+};
+
 export const getEvents = async () => {
   NProgress.start();
   if (window.location.href.startsWith('http://localhost')) {
     NProgress.done();
     return mockData;
   }
+  if (!navigator.onLine) {
+    const data = localStorage.getItem("lastEvents");
+    NProgress.done();
+    return data ? JSON.parse(data).events : [];;
+  }
 
   const token = await getAccessToken();
-
   if (token) {
     removeQuery();
     const url = 'https://pvm3533762.execute-api.eu-central-1.amazonaws.com/dev/api/get-events' + '/' + token;
@@ -61,19 +66,6 @@ export const getEvents = async () => {
   }
 };
 
-const removeQuery = () => {
-  if (window.history.pushState && window.location.pathname) {
-    var newurl =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      window.location.pathname;
-    window.history.pushState("", "", newurl);
-  } else {
-    newurl = window.location.protocol + "//" + window.location.host;
-    window.history.pushState("", "", newurl);
-  }
-};
 
 const getToken = async (code) => {
   const encodeCode = encodeURIComponent(code);
@@ -88,4 +80,17 @@ const getToken = async (code) => {
   access_token && localStorage.setItem("access_token", access_token);
 
   return access_token;
+};
+const removeQuery = () => {
+  if (window.history.pushState && window.location.pathname) {
+    var newurl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname;
+    window.history.pushState("", "", newurl);
+  } else {
+    newurl = window.location.protocol + "//" + window.location.host;
+    window.history.pushState("", "", newurl);
+  }
 };
