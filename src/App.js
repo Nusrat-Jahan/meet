@@ -52,16 +52,6 @@ class App extends Component {
   componentDidMount() {
     this.mounted = true;
 
-    if (!navigator.onLine) {
-      return this.setState({
-        warningText: "You are currently offline, events may not be up-to-date.",
-      });
-    } else {
-      this.setState({
-        warningText: "",
-      });
-    }
-
     const { numberOfEvents } = this.state;
     getEvents().then((events) => {
       if (this.mounted) {
@@ -72,6 +62,16 @@ class App extends Component {
         console.log("events", events);
       }
     });
+
+    if (!navigator.onLine) {
+      return this.setState({
+        warningText: "You are currently offline, events may not be up-to-date.",
+      });
+    } else {
+      this.setState({
+        warningText: "",
+      });
+    }
   }
 
   componentWillUnmount() {
