@@ -5,7 +5,8 @@ import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
 import { extractLocations, getEvents } from './api';
 import './nprogress.css';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { WarningAlert } from './Alert';
 
 class App extends Component {
   state = {
@@ -50,6 +51,17 @@ class App extends Component {
   // componentDidMount to make the API call and save the initial data to state:
   componentDidMount() {
     this.mounted = true;
+
+    if (!navigator.onLine) {
+      return this.setState({
+        warningText: "You are currently offline, events may not be up-to-date.",
+      });
+    } else {
+      this.setState({
+        warningText: "",
+      });
+    }
+
     const { numberOfEvents } = this.state;
     getEvents().then((events) => {
       if (this.mounted) {
@@ -69,6 +81,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <WarningAlert text={this.state.warningText} />
         <h1 className='header-title'>Meet App</h1>
         <h4 className='filter-title'>Choose your nearest city</h4>
 
