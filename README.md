@@ -1,5 +1,5 @@
 # Meet App
-![Meet App](https://nusrat-jahan.github.io/meet/)
+[Meet App](https://nusrat-jahan.github.io/meet/)
 
 ## Project Objective:
 
